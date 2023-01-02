@@ -15,6 +15,7 @@
     "honkit": "^4.0.4"
   },
   "dependencies": {
+    "gitbook-plugin-uml": "^1.2.21",
     "honkit-plugin-mermaid-md-adoc": "^0.0.8"
   }
 }
