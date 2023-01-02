@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@dogatana/honkit-plugin-back-to-top-button": "^1.0.0",
+    "gitbook-plugin-collapsible-chapters": "^0.1.8",
     "gitbook-plugin-intopic-toc": "^1.1.1",
     "honkit-plugin-mermaid-md-adoc": "^0.0.8"
   }
