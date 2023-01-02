@@ -1,5 +1,6 @@
 {
   "title": "youichiro handbook",
+  "language": "ja",
   "plugins": ["mermaid-md-adoc", "@ansanloms/uml", "intopic-toc"],
   "pluginsConfig": {
     "uml": {
