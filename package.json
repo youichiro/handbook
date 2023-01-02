@@ -12,6 +12,7 @@
   "author": "youichiro <cinnamon416@gmail.com> (https://github.com/youichiro/)",
   "license": "ISC",
   "devDependencies": {
+    "@ansanloms/honkit-plugin-uml": "^0.0.8",
     "honkit": "^4.0.4"
   },
   "dependencies": {
