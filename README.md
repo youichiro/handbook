@@ -21,4 +21,6 @@ by using [honkit](https://github.com/honkit/honkit) and [GitHub Pages](https://d
   - for adding a back to top button
 - [gitbook-plugin-collapsible-chapters](https://github.com/vihanb/gitbook-plugin-collapsible-chapters)
   - for adding an icon to each chapter
+- [gitbook-plugin-lb2br](https://www.npmjs.com/package/gitbook-plugin-lb2br)
+  - for converting line breaks into html br tags
 
