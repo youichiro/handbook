@@ -1,6 +1,13 @@
 {
   "title": "youichiro handbook",
-  "plugins": ["mermaid-md-adoc", "@ansanloms/uml", "intopic-toc", "@dogatana/back-to-top-button", "collapsible-chapters"],
+  "plugins": [
+    "mermaid-md-adoc",
+    "@ansanloms/uml",
+    "intopic-toc",
+    "@dogatana/back-to-top-button",
+    "collapsible-chapters",
+    "lb2br"
+  ],
   "pluginsConfig": {
     "uml": {
       "format": "svg",
