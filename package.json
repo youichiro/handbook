@@ -16,6 +16,7 @@
     "honkit": "^4.0.4"
   },
   "dependencies": {
+    "gitbook-plugin-intopic-toc": "^1.1.1",
     "honkit-plugin-mermaid-md-adoc": "^0.0.8"
   }
 }
