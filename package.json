@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "honkit build ../docs",
-    "serve": "honkit serve"
+    "build": "honkit build ./docs",
+    "serve": "honkit serve ./src"
   },
   "keywords": [],
   "author": "youichiro <cinnamon416@gmail.com> (https://github.com/youichiro/)",
