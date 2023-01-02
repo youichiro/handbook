@@ -1,3 +1,6 @@
+サンプルページです
+サンプルページです
+
 ## mermaid example
 ```mermaid
 gantt
