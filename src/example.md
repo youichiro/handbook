@@ -1,3 +1,4 @@
+## mermaid example
 ```mermaid
 gantt
     dateFormat  YYYY-MM-DD
@@ -30,3 +31,15 @@ gantt
     Add gantt diagram to demo page      :20h
     Add another diagram to demo page    :48h
 ```
+
+## UML example
+```uml
+@startuml
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+@enduml
+```
+

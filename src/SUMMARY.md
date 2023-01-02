@@ -2,5 +2,5 @@
 
 * [Introduction](README.md)
 
-* [mermaid example](mermaid_example.md)
+* [example](example.md)
 
