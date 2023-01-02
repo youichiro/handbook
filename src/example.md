@@ -62,3 +62,7 @@ print(result)
 | 1 | 2 | 3 |
 | A | B | C |
 
+
+## images example
+![image](images/kaisya_shigoto_music_man.png)
+
