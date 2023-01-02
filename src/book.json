@@ -1,3 +1,4 @@
 {
-  "title": "youichiro handbook"
+  "title": "youichiro handbook",
+  "plugins": ["mermaid-md-adoc"]
 }
