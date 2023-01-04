@@ -1,6 +1,6 @@
 # handbook
 hosting https://youichiro.github.io/handbook/  
-by using [honkit](https://github.com/honkit/honkit) and [GitHub Pages](https://docs.github.com/ja/pages)
+by using [HonKit](https://github.com/honkit/honkit) and [GitHub Pages](https://docs.github.com/ja/pages)
 
 ## setup
 - `npm install`
