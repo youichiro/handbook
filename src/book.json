@@ -6,7 +6,8 @@
     "intopic-toc",
     "@dogatana/back-to-top-button",
     "collapsible-chapters",
-    "lb2br"
+    "lb2br",
+    "codeblock-filename"
   ],
   "pluginsConfig": {
     "uml": {
