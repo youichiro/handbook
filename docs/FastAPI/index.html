@@ -1,0 +1,815 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>FastAPI · youichiro handbook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 4.0.4">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-intopic-toc/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/@dogatana/honkit-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-collapsible-chapters/collapsible-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-codeblock-filename/block.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/@honkit/honkit-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="../" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Youichiro Handbook
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Python</li>
+        
+        
+    
+        <li class="chapter active" data-level="2.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    FastAPI
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >FastAPI</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="fastapi">FastAPI</h1>
+<h2 id="fastapiとは">FastAPIとは</h2>
+<p><a href="https://github.com/tiangolo/fastapi" target="_blank">FastAPI</a>はPythonのWebフレームワークです<br>FastAPIは以下の特徴があります</p>
+<ul>
+<li>Pythonフレームワークの中で最も高速</li>
+<li>自動でAPIドキュメントを出力できる</li>
+<li>Pythonの型定義を利用してデータを検証できる</li>
+<li>公式ドキュメントがわかりやすくて充実している</li>
+</ul>
+<p>このドキュメントでは、FastAPIを使ってAPIを開発する手順をまとめます<br>使用するFastAPIのバージョンは <strong>0.88.0</strong> です</p>
+<p>このドキュメントで使用したソースコードは以下のリポジトリで確認することができます<br><a href="https://github.com/youichiro/fastapi-todo-app-demo" target="_blank">https://github.com/youichiro/fastapi-todo-app-demo</a></p>
+<h2 id="作るもの">作るもの</h2>
+<p>FastAPIでシンプルなTODOアプリのAPIを作ります<br>以下のようなデータモデルを想定します</p>
+<div class="mermaid">
+erDiagram
+    users {
+        id int PK
+        name string
+        created_at datetime
+    }
+    tasks {
+        id int PK
+        user_id int FK
+        title string
+        done boolean
+        created_at datetime
+        updated_at datetime
+    }
+</div>
+
+<p>以下のCRUDを用意します</p>
+<ul>
+<li>create a user</li>
+<li>get a user</li>
+<li>get all users</li>
+<li>create a task</li>
+<li>get all tasks for user</li>
+</ul>
+<h2 id="やること">やること</h2>
+<ol>
+<li>プロジェクトを作成する</li>
+<li>データベースを用意する</li>
+<li>データベースと接続する設定ファイルを作成する</li>
+<li>データモデルを定義する</li>
+<li>Pydanticスキーマを定義する</li>
+<li>CRUDの処理を用意する</li>
+<li>ルーティングを定義する</li>
+<li>マイグレーションを実行する</li>
+<li>動作確認する</li>
+</ol>
+<h2 id="最終的なディレクトリ構成">最終的なディレクトリ構成</h2>
+<pre><code>.
+├── app
+│   ├── crud.py
+│   ├── database.py
+│   ├── main.py
+│   ├── models.py
+│   └── schemas.py
+├── db
+│   ├── alembic.ini
+│   ├── development
+│   │   ├── README
+│   │   ├── env.py
+│   │   ├── script.py.mako
+│   │   └── versions
+│   │       └── 9965d78849e3_first_migration.py
+│   └── init
+│       └── 1_create_databases.sql
+├── docker-compose.yaml
+└── requirements.txt
+</code></pre><h2 id="1-プロジェクトを作成する">1. プロジェクトを作成する</h2>
+<p>FastAPIに必要なライブラリをインストールします</p>
+<pre><code class="lang-sh">pip install fastapi <span class="hljs-string">&quot;uvicorn[standard]&quot;</span>
+</code></pre>
+<p>サンプルコードで試しにFastAPIを起動してみます<br>app/main.pyを作成します</p>
+<div><p class="code-filename">app/main.py</p></div>
+<pre><code class="lang-python"><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+
+app = FastAPI()
+
+
+<span class="hljs-meta">@app.get(<span class="hljs-params"><span class="hljs-string">&quot;/&quot;</span></span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_root</span>():</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;Hello&quot;</span>: <span class="hljs-string">&quot;World&quot;</span>}
+
+
+<span class="hljs-meta">@app.get(<span class="hljs-params"><span class="hljs-string">&quot;/items/{item_id}&quot;</span></span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_item</span>(<span class="hljs-params">item_id: <span class="hljs-built_in">int</span>, q: <span class="hljs-built_in">str</span> = <span class="hljs-literal">None</span></span>):</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;item_id&quot;</span>: item_id, <span class="hljs-string">&quot;q&quot;</span>: q}
+</code></pre>
+<p>サーバーを立ち上げる</p>
+<pre><code class="lang-sh">uvicorn app.main:app --reload
+</code></pre>
+<p>curlでレスポンスを確認します</p>
+<pre><code class="lang-sh">$ curl http://127.0.0.1:8000/items/5?q=somequery
+
+{<span class="hljs-string">&quot;item_id&quot;</span>:5,<span class="hljs-string">&quot;q&quot;</span>:<span class="hljs-string">&quot;somequery&quot;</span>}
+</code></pre>
+<p>FastAPIではルーティングの定義に従って、自動でOpenAPIを生成してくれます<br><a href="http://127.0.0.1:8000/docs" target="_blank">http://127.0.0.1:8000/docs</a> を開くと、<a href="https://swagger.io/tools/swagger-ui/" target="_blank">Swagger UI</a>でOpenAPIドキュメントを表示してくれる</p>
+<p><img src="https://storage.googleapis.com/zenn-user-upload/69055f7f9341-20230104.png" alt></p>
+<p>また、<a href="http://127.0.0.1:8000/redoc" target="_blank">http://127.0.0.1:8000/redoc</a> を開くと <a href="https://github.com/Redocly/redoc" target="_blank">ReDoc</a> でもOpenAPIドキュメントを表示してくれます</p>
+<p><img src="https://storage.googleapis.com/zenn-user-upload/0769a3531e86-20230104.png" alt></p>
+<h2 id="2-データベースを用意する">2. データベースを用意する</h2>
+<p>docker composeでPostgreSQLを起動します</p>
+<p>まず、データベースを作成するためのSQLファイルを用意します</p>
+<div><p class="code-filename">db/init/1_create_databases.sql</p></div>
+<pre><code class="lang-sql"><span class="hljs-keyword">CREATE</span> DATABASE fastapi_todo_app_development;
+</code></pre>
+<p>次に、docker-compose.yamlを作成します</p>
+<div><p class="code-filename">docker-compose.yaml</p></div>
+<pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3&apos;</span>
+
+<span class="hljs-attr">services:</span>
+  <span class="hljs-attr">db:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">postgres:15</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">5432</span><span class="hljs-string">:5432</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">db-store:/var/lib/postgresql/data</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">./db/init:/docker-entrypoint-initdb.d</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">POSTGRES_PASSWORD=password</span>
+<span class="hljs-attr">volumes:</span>
+  <span class="hljs-attr">db-store:</span>
+</code></pre>
+<p>最後に、dockerコンテナを起動します</p>
+<pre><code class="lang-sh">docker compose up -d
+</code></pre>
+<h2 id="3-データベースと接続する設定ファイルを作成する">3. データベースと接続する設定ファイルを作成する</h2>
+<p>データベースとの接続には<a href="https://www.sqlalchemy.org" target="_blank">SQLAlchemy</a>を使用するので、ライブラリをインストールします</p>
+<pre><code class="lang-sh">pip install sqlalchemy
+</code></pre>
+<p>appディレクトリにdatabase.pyを作成します</p>
+<div><p class="code-filename">app/database.py</p></div>
+<pre><code class="lang-python"><span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> create_engine
+<span class="hljs-keyword">from</span> sqlalchemy.ext.declarative <span class="hljs-keyword">import</span> declarative_base
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> sessionmaker
+
+SQLALCHEMY_DATABASE_URL = <span class="hljs-string">&quot;postgresql://postgres:password@0.0.0.0:5432/fastapi_todo_app_development&quot;</span>
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=<span class="hljs-literal">False</span>, autoflush=<span class="hljs-literal">False</span>, bind=engine)
+
+Base = declarative_base()
+</code></pre>
+<ul>
+<li><code>SQLALCHEMY_DATABASE_URL</code>にはPostgreSQLの情報を記述する</li>
+</ul>
+<h2 id="4-データモデルを定義する">4. データモデルを定義する</h2>
+<p>appディレクトリにmodels.pyを作成します</p>
+<div><p class="code-filename">app/models.py</p></div>
+<pre><code class="lang-python"><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+
+<span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> Boolean, Column, ForeignKey, Integer, String, DateTime
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> relationship
+
+<span class="hljs-keyword">from</span> .database <span class="hljs-keyword">import</span> Base
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span>(<span class="hljs-params">Base</span>):</span>
+    __tablename__ = <span class="hljs-string">&quot;users&quot;</span>
+
+    <span class="hljs-built_in">id</span> = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    name = Column(String, unique=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    created_at = Column(DateTime, default=datetime.now(), nullable=<span class="hljs-literal">False</span>)
+
+    tasks = relationship(<span class="hljs-string">&quot;Task&quot;</span>, back_populates=<span class="hljs-string">&quot;user&quot;</span>)
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Task</span>(<span class="hljs-params">Base</span>):</span>
+    __tablename__ = <span class="hljs-string">&quot;tasks&quot;</span>
+
+    <span class="hljs-built_in">id</span> = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    title = Column(String, index=<span class="hljs-literal">True</span>)
+    done = Column(Boolean, default=<span class="hljs-literal">False</span>, index=<span class="hljs-literal">True</span>)
+    created_at = Column(DateTime, default=datetime.now(), nullable=<span class="hljs-literal">False</span>)
+    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=<span class="hljs-literal">False</span>)
+    user_id = Column(Integer, ForeignKey(<span class="hljs-string">&quot;users.id&quot;</span>))
+
+    user = relationship(<span class="hljs-string">&quot;User&quot;</span>, back_populates=<span class="hljs-string">&quot;tasks&quot;</span>)
+</code></pre>
+<ul>
+<li>先ほど作成したdatabase.pyの<code>Base</code>をimportし、各エンティティのモデルクラスで継承する</li>
+<li>各カラムの型は<a href="https://docs.sqlalchemy.org/en/14/core/type_basics.html" target="_blank">SQLAlchemyの型</a>で指定する</li>
+<li>関連付けは<code>relationship</code>で表現する</li>
+</ul>
+<h2 id="5-pydanticスキーマを定義する">5. Pydanticスキーマを定義する</h2>
+<p>models.pyで定義したSQLAlchemyモデルに対して、作成時・読み込み時のモデルの属性や型、制約などをPydanticモデルで定義します (Pydanticスキーマ)</p>
+<p>appディレクトリにschemas.pyを作成します</p>
+<div><p class="code-filename">app/schemas.py</p></div>
+<pre><code class="lang-python"><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TaskBase</span>(<span class="hljs-params">BaseModel</span>):</span>
+    title: <span class="hljs-built_in">str</span>
+    done: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">False</span>
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TaskCreate</span>(<span class="hljs-params">TaskBase</span>):</span>
+    <span class="hljs-keyword">pass</span>
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Task</span>(<span class="hljs-params">TaskBase</span>):</span>
+    <span class="hljs-built_in">id</span>: <span class="hljs-built_in">int</span>
+    created_at: datetime
+    updated_at: datetime
+    user_id: <span class="hljs-built_in">int</span>
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        orm_mode = <span class="hljs-literal">True</span>
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserBase</span>(<span class="hljs-params">BaseModel</span>):</span>
+    name: <span class="hljs-built_in">str</span>
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserCreate</span>(<span class="hljs-params">UserBase</span>):</span>
+    <span class="hljs-keyword">pass</span>
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span>(<span class="hljs-params">UserBase</span>):</span>
+    <span class="hljs-built_in">id</span>: <span class="hljs-built_in">int</span>
+    created_at: datetime
+    tasks: <span class="hljs-built_in">list</span>[Task] = []
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        orm_mode = <span class="hljs-literal">True</span>
+</code></pre>
+<ul>
+<li><code>TaskBase</code>、<code>UserBase</code>はそのモデルの作成時・読み込み時での共通の属性情報を定義している</li>
+<li><code>TaskCreate</code>、<code>UserCreate</code>は、そのモデルの作成時に必要な属性情報を定義している (今回はBaseと差分がないのでpassしている)</li>
+<li><code>Task</code>、<code>User</code>は、そのモデルの読み込み時に必要な属性情報を定義している<ul>
+<li>idやcreated_atなどは実際にレコードが作成された後に付与される値なので、作成時は指定しないはず</li>
+</ul>
+</li>
+<li><code>orm_mode = True</code>を設定することで、Pydanticモデルの属性を <code>id = data[&quot;id&quot;]</code> だけでなく <code>id = data.id</code> でも参照できるようになる</li>
+</ul>
+<h2 id="6-crudの処理を用意する">6. CRUDの処理を用意する</h2>
+<p>データベースから特定のレコードを取得・挿入する処理を実行する関数を用意します</p>
+<p>appディレクトリにcrud.pyを作成します</p>
+<div><p class="code-filename">app/crud.py</p></div>
+<pre><code class="lang-python"><span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+
+<span class="hljs-keyword">from</span> . <span class="hljs-keyword">import</span> models, schemas
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user</span>(<span class="hljs-params">db: Session, user_id: <span class="hljs-built_in">int</span></span>):</span>
+    <span class="hljs-keyword">return</span> db.query(models.User).<span class="hljs-built_in">filter</span>(models.User.<span class="hljs-built_in">id</span> == user_id).first()
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_name</span>(<span class="hljs-params">db: Session, name: <span class="hljs-built_in">str</span></span>):</span>
+    <span class="hljs-keyword">return</span> db.query(models.User).<span class="hljs-built_in">filter</span>(models.User.name == name).first()
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_users</span>(<span class="hljs-params">db: Session, skip: <span class="hljs-built_in">int</span> = <span class="hljs-number">0</span>, limit: <span class="hljs-built_in">int</span> = <span class="hljs-number">100</span></span>):</span>
+    <span class="hljs-keyword">return</span> db.query(models.User).offset(skip).limit(limit).<span class="hljs-built_in">all</span>()
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span>(<span class="hljs-params">db: Session, user: schemas.UserCreate</span>):</span>
+    new_user = models.User(**user.<span class="hljs-built_in">dict</span>())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    <span class="hljs-keyword">return</span> new_user
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_tasks</span>(<span class="hljs-params">db: Session, user_id: <span class="hljs-built_in">int</span>, skip: <span class="hljs-built_in">int</span> = <span class="hljs-number">0</span>, limit: <span class="hljs-built_in">int</span> = <span class="hljs-number">100</span></span>):</span>
+    <span class="hljs-keyword">return</span> db.query(models.Task).<span class="hljs-built_in">filter</span>(models.Task.user_id == user_id).offset(skip).limit(limit).<span class="hljs-built_in">all</span>()
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user_task</span>(<span class="hljs-params">db: Session, task: schemas.TaskCreate, user_id: <span class="hljs-built_in">int</span></span>):</span>
+    new_task = models.Task(**task.<span class="hljs-built_in">dict</span>(), user_id=user_id)
+    db.add(new_task)
+    db.commit()
+    db.refresh(new_task)
+    <span class="hljs-keyword">return</span> new_task
+</code></pre>
+<ul>
+<li>各関数はsqlalchemy.orm.Session型の<code>db</code>インスタンスを引数に受け取り、このインスタンスを通じてデータベースを操作する</li>
+<li>Pydanticモデルのインスタンスは<code>task.dict()</code>で属性を辞書に変換できる</li>
+</ul>
+<h2 id="7-ルーティングを定義する">7. ルーティングを定義する</h2>
+<p>app/main.pyを変更し、ルーティングを定義する</p>
+<div><p class="code-filename">app/main.py</p></div>
+<pre><code class="lang-python"><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Depends, FastAPI, HTTPException
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+
+<span class="hljs-keyword">from</span> . <span class="hljs-keyword">import</span> crud, models, schemas
+<span class="hljs-keyword">from</span> .database <span class="hljs-keyword">import</span> SessionLocal, engine
+
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_db</span>():</span>
+    db = SessionLocal()
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">yield</span> db
+    <span class="hljs-keyword">finally</span>:
+        db.close()
+
+
+<span class="hljs-meta">@app.post(<span class="hljs-params"><span class="hljs-string">&quot;/users/&quot;</span>, response_model=schemas.User</span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span>(<span class="hljs-params">user: schemas.UserCreate, db: Session = Depends(<span class="hljs-params">get_db</span>)</span>):</span>
+    db_user = crud.get_user_by_name(db, name=user.name)
+    <span class="hljs-keyword">if</span> db_user:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">400</span>, detail=<span class="hljs-string">f&quot;User name: <span class="hljs-subst">{user.name}</span> already exists.&quot;</span>)
+    <span class="hljs-keyword">return</span> crud.create_user(db=db, user=user)
+
+
+<span class="hljs-meta">@app.get(<span class="hljs-params"><span class="hljs-string">&quot;/users/&quot;</span>, response_model=<span class="hljs-built_in">list</span>[schemas.User]</span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_users</span>(<span class="hljs-params">skip: <span class="hljs-built_in">int</span> = <span class="hljs-number">0</span>, limit: <span class="hljs-built_in">int</span> = <span class="hljs-number">100</span>, db: Session = Depends(<span class="hljs-params">get_db</span>)</span>):</span>
+    users = crud.get_users(db, skip=skip, limit=limit)
+    <span class="hljs-keyword">return</span> users
+
+
+<span class="hljs-meta">@app.get(<span class="hljs-params"><span class="hljs-string">&quot;/users/{user_id}&quot;</span>, response_model=schemas.User</span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user</span>(<span class="hljs-params">user_id: <span class="hljs-built_in">int</span>, db: Session = Depends(<span class="hljs-params">get_db</span>)</span>):</span>
+    user = crud.get_user(db, user_id=user_id)
+    <span class="hljs-keyword">if</span> user:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">404</span>, detail=<span class="hljs-string">f&quot;User ID: <span class="hljs-subst">{user_id}</span> not found&quot;</span>)
+    <span class="hljs-keyword">return</span> user
+
+<span class="hljs-meta">@app.post(<span class="hljs-params"><span class="hljs-string">&quot;/users/{user_id}/tasks/&quot;</span>, response_model=schemas.Task</span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_task_for_user</span>(<span class="hljs-params">user_id: <span class="hljs-built_in">int</span>, task: schemas.TaskCreate, db: Session = Depends(<span class="hljs-params">get_db</span>)</span>):</span>
+    task = crud.create_user_task(db=db, task=task, user_id=user_id)
+    <span class="hljs-keyword">return</span> task
+
+
+<span class="hljs-meta">@app.get(<span class="hljs-params"><span class="hljs-string">&quot;/users/{user_id}/tasks/&quot;</span>, response_model=<span class="hljs-built_in">list</span>[schemas.Task]</span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_tasks_for_user</span>(<span class="hljs-params">user_id: <span class="hljs-built_in">int</span>, skip: <span class="hljs-built_in">int</span> = <span class="hljs-number">0</span>, limit: <span class="hljs-built_in">int</span> = <span class="hljs-number">100</span>, db: Session = Depends(<span class="hljs-params">get_db</span>)</span>):</span>
+    tasks = crud.get_tasks(db=db, user_id=user_id, skip=skip, limit=limit)
+    <span class="hljs-keyword">return</span> tasks
+</code></pre>
+<ul>
+<li>リクエストごとにデータベースのセッションを発行→クローズする<ul>
+<li>そのため、全てのパス関数 (<code>@app.xxx</code>デコレータを付けてる関数のこと) でsqlalchemy.orm.Session型の<code>db</code>インスタンスを渡している</li>
+<li>デフォルト値に<code>Depends(get_db)</code>を指定することで、パス関数を実行する前に<code>get_db</code>を実行し、dbインスタンスを取得する<ul>
+<li>もし取得できなかった場合は失敗する</li>
+<li>つまり、パス関数はget_dbの返り値を要求する (依存させる)</li>
+<li>参考: <a href="https://fastapi.tiangolo.com/features/#dependency-injection" target="_blank">https://fastapi.tiangolo.com/features/#dependency-injection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>エラーレスポンスを返したいときは <code>HTTPException</code> をraiseする<ul>
+<li>カスタム例外ハンドラーも定義できる</li>
+<li>参考: <a href="https://fastapi.tiangolo.com/tutorial/handling-errors/" target="_blank">https://fastapi.tiangolo.com/tutorial/handling-errors/</a></li>
+</ul>
+</li>
+<li>パスパラメータ・クエリパラメータ・ボディパラメータのバリデーションもここで定義することができる<ul>
+<li>例えばクエリパラメータの最大文字数を制限したい場合は <code>def read_items(q: str = Query(max_length=50))</code> のように書ける<ul>
+<li>参考: <a href="https://fastapi.tiangolo.com/ja/tutorial/query-params-str-validations/" target="_blank">https://fastapi.tiangolo.com/ja/tutorial/query-params-str-validations/</a></li>
+</ul>
+</li>
+<li>また、models.pyの各モデルクラスでもバリデーションを定義できる<ul>
+<li>参考: <a href="https://fastapi.tiangolo.com/ja/tutorial/schema-extra-example/" target="_blank">https://fastapi.tiangolo.com/ja/tutorial/schema-extra-example/</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="8-マイグレーションを実行する">8. マイグレーションを実行する</h2>
+<p>SQLAlchemyのモデル定義をもとにデータベースにテーブルを作成するために、<a href="https://alembic.sqlalchemy.org/en/latest/index.html" target="_blank">Alembic</a> を使用します</p>
+<p>まず、alembicと、今回はデータベースにPostgreSQLを使うので psycopg2 をインストールします</p>
+<pre><code class="lang-sh">pip install alembic psycopg2
+</code></pre>
+<p>dbディレクトリで <code>alembic init</code> コマンドを実行し、テンプレートを生成します</p>
+<pre><code class="lang-sh"><span class="hljs-built_in">cd</span> db
+alembic init development <span class="hljs-comment"># staging環境やproduction環境でDBの状態を分けることを想定してdevelopmentにしてる</span>
+</code></pre>
+<pre><code class="lang-sh">$ tree .
+.
+├── alembic.ini
+├── development
+│   ├── README
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions
+└── init
+    └── 1_create_databases.sql
+</code></pre>
+<p>db/alembic.iniのデータベースの指定を修正します</p>
+<div><p class="code-filename">db/alembic.ini</p></div>
+<pre><code class="lang-diff"><span class="hljs-deletion">- sqlalchemy.url = driver://user:pass@localhost/dbname</span>
+<span class="hljs-addition">+ sqlalchemy.url = postgresql://postgres:password@0.0.0.0:5432/fastapi_todo_app_development</span>
+</code></pre>
+<p>また、db/development/env.py のmetadataの指定を修正します</p>
+<div><p class="code-filename">db/development/env.py</p></div>
+<pre><code class="lang-diff"><span class="hljs-addition">+ import os</span>
+<span class="hljs-addition">+ import sys</span>
+
+# ...
+
+ # add your model&apos;s MetaData object here
+ # for &apos;autogenerate&apos; support
+<span class="hljs-addition">+ sys.path.append(os.path.join(os.path.dirname(__file__), &apos;../..&apos;))</span>
+<span class="hljs-addition">+ from app.models import Base</span>
+<span class="hljs-addition">+ target_metadata = Base.metadata</span>
+<span class="hljs-deletion">- # from myapp import mymodel</span>
+<span class="hljs-deletion">- # target_metadata = mymodel.Base.metadata</span>
+<span class="hljs-deletion">- target_metadata = None</span>
+
+# ...
+</code></pre>
+<p><code>alembic revision</code>コマンドで、マイグレーションファイルを生成します<br>このとき、<a href="https://alembic.sqlalchemy.org/en/latest/autogenerate.html" target="_blank">autogenerate</a>オプションを指定することで、上で指定したSQLAlchemyのmetadataを参照してテーブル定義を生成することができます</p>
+<pre><code class="lang-sh">alembic revision --autogenerate -m <span class="hljs-string">&quot;first migration&quot;</span>
+</code></pre>
+<p>db/development/versions配下にmigrationファイルが生成されます</p>
+<div><p class="code-filename">db/development/versions/160c8582fb23_first_migration.py</p></div>
+<pre><code class="lang-python"><span class="hljs-string">&quot;&quot;&quot;first migration
+
+Revision ID: 65ffef639936
+Revises: 
+Create Date: 2023-01-03 15:40:18.802548
+
+&quot;&quot;&quot;</span>
+<span class="hljs-keyword">from</span> alembic <span class="hljs-keyword">import</span> op
+<span class="hljs-keyword">import</span> sqlalchemy <span class="hljs-keyword">as</span> sa
+
+
+<span class="hljs-comment"># revision identifiers, used by Alembic.</span>
+revision = <span class="hljs-string">&apos;65ffef639936&apos;</span>
+down_revision = <span class="hljs-literal">None</span>
+branch_labels = <span class="hljs-literal">None</span>
+depends_on = <span class="hljs-literal">None</span>
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">upgrade</span>() -&gt; <span class="hljs-literal">None</span>:</span>
+    <span class="hljs-comment"># ### commands auto generated by Alembic - please adjust! ###</span>
+    op.create_table(<span class="hljs-string">&apos;users&apos;</span>,
+    sa.Column(<span class="hljs-string">&apos;id&apos;</span>, sa.Integer(), nullable=<span class="hljs-literal">False</span>),
+    sa.Column(<span class="hljs-string">&apos;name&apos;</span>, sa.String(), nullable=<span class="hljs-literal">True</span>),
+    sa.Column(<span class="hljs-string">&apos;created_at&apos;</span>, sa.DateTime(), nullable=<span class="hljs-literal">False</span>),
+    sa.PrimaryKeyConstraint(<span class="hljs-string">&apos;id&apos;</span>)
+    )
+    op.create_index(op.f(<span class="hljs-string">&apos;ix_users_id&apos;</span>), <span class="hljs-string">&apos;users&apos;</span>, [<span class="hljs-string">&apos;id&apos;</span>], unique=<span class="hljs-literal">False</span>)
+    op.create_index(op.f(<span class="hljs-string">&apos;ix_users_name&apos;</span>), <span class="hljs-string">&apos;users&apos;</span>, [<span class="hljs-string">&apos;name&apos;</span>], unique=<span class="hljs-literal">True</span>)
+    op.create_table(<span class="hljs-string">&apos;tasks&apos;</span>,
+    sa.Column(<span class="hljs-string">&apos;id&apos;</span>, sa.Integer(), nullable=<span class="hljs-literal">False</span>),
+    sa.Column(<span class="hljs-string">&apos;title&apos;</span>, sa.String(), nullable=<span class="hljs-literal">True</span>),
+    sa.Column(<span class="hljs-string">&apos;done&apos;</span>, sa.Boolean(), nullable=<span class="hljs-literal">True</span>),
+    sa.Column(<span class="hljs-string">&apos;created_at&apos;</span>, sa.DateTime(), nullable=<span class="hljs-literal">False</span>),
+    sa.Column(<span class="hljs-string">&apos;updated_at&apos;</span>, sa.DateTime(), nullable=<span class="hljs-literal">False</span>),
+    sa.Column(<span class="hljs-string">&apos;user_id&apos;</span>, sa.Integer(), nullable=<span class="hljs-literal">True</span>),
+    sa.ForeignKeyConstraint([<span class="hljs-string">&apos;user_id&apos;</span>], [<span class="hljs-string">&apos;users.id&apos;</span>], ),
+    sa.PrimaryKeyConstraint(<span class="hljs-string">&apos;id&apos;</span>)
+    )
+    op.create_index(op.f(<span class="hljs-string">&apos;ix_tasks_done&apos;</span>), <span class="hljs-string">&apos;tasks&apos;</span>, [<span class="hljs-string">&apos;done&apos;</span>], unique=<span class="hljs-literal">False</span>)
+    op.create_index(op.f(<span class="hljs-string">&apos;ix_tasks_id&apos;</span>), <span class="hljs-string">&apos;tasks&apos;</span>, [<span class="hljs-string">&apos;id&apos;</span>], unique=<span class="hljs-literal">False</span>)
+    op.create_index(op.f(<span class="hljs-string">&apos;ix_tasks_title&apos;</span>), <span class="hljs-string">&apos;tasks&apos;</span>, [<span class="hljs-string">&apos;title&apos;</span>], unique=<span class="hljs-literal">False</span>)
+    <span class="hljs-comment"># ### end Alembic commands ###</span>
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">downgrade</span>() -&gt; <span class="hljs-literal">None</span>:</span>
+    <span class="hljs-comment"># ### commands auto generated by Alembic - please adjust! ###</span>
+    op.drop_index(op.f(<span class="hljs-string">&apos;ix_tasks_title&apos;</span>), table_name=<span class="hljs-string">&apos;tasks&apos;</span>)
+    op.drop_index(op.f(<span class="hljs-string">&apos;ix_tasks_id&apos;</span>), table_name=<span class="hljs-string">&apos;tasks&apos;</span>)
+    op.drop_index(op.f(<span class="hljs-string">&apos;ix_tasks_done&apos;</span>), table_name=<span class="hljs-string">&apos;tasks&apos;</span>)
+    op.drop_table(<span class="hljs-string">&apos;tasks&apos;</span>)
+    op.drop_index(op.f(<span class="hljs-string">&apos;ix_users_name&apos;</span>), table_name=<span class="hljs-string">&apos;users&apos;</span>)
+    op.drop_index(op.f(<span class="hljs-string">&apos;ix_users_id&apos;</span>), table_name=<span class="hljs-string">&apos;users&apos;</span>)
+    op.drop_table(<span class="hljs-string">&apos;users&apos;</span>)
+    <span class="hljs-comment"># ### end Alembic commands ###</span>
+</code></pre>
+<p><code>alembic upgrade</code>コマンドで、実際にマイグレーションを実行します</p>
+<pre><code class="lang-sh">$ alembic upgrade head
+</code></pre>
+<p>これでテーブルが作成されます</p>
+<h2 id="9-動作確認する">9. 動作確認する</h2>
+<p>最後に、サーバーを起動して動作確認します</p>
+<pre><code class="lang-sh"><span class="hljs-comment"># プロジェクトディレクトリで実行する</span>
+uvicorn app.main:app --reload
+</code></pre>
+<p>OpenAPIが自動で定義されています</p>
+<p><img src="https://storage.googleapis.com/zenn-user-upload/702ba9c77e48-20230104.png" alt></p>
+<p>curlでリクエストを送信してみます</p>
+<pre><code class="lang-sh">$ curl localhost:8000/users/ \
+  -X POST \
+  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  -d <span class="hljs-string">&apos;{
+    &quot;name&quot;: &quot;hoge&quot;
+  }&apos;</span>
+
+{<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;hoge&quot;</span>,<span class="hljs-string">&quot;id&quot;</span>:1,<span class="hljs-string">&quot;created_at&quot;</span>:<span class="hljs-string">&quot;2023-01-03T20:02:18.375334&quot;</span>,<span class="hljs-string">&quot;tasks&quot;</span>:[]}%
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Youichiro Handbook">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"FastAPI","level":"2.1","depth":1,"previous":{"title":"Youichiro Handbook","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["mermaid-md-adoc","@ansanloms/uml","intopic-toc","@dogatana/back-to-top-button","collapsible-chapters","lb2br","codeblock-filename"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"@dogatana/back-to-top-button":{},"@ansanloms/uml":{},"intopic-toc":{"selector":".markdown-section h1, .markdown-section h2, .markdown-section h3, .markdown-section h4, .markdown-section h5, .markdown-section h6","mode":"nested","maxDepth":3,"isCollapsed":false,"isScrollspyActive":true,"visible":true,"label":""},"search":{},"collapsible-chapters":{},"mermaid-md-adoc":{},"lb2br":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"uml":{"format":"svg","charset":"utf8","config":"monochrome"},"codeblock-filename":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"youichiro handbook","gitbook":"*"},"file":{"path":"FastAPI/README.md","mtime":"2023-01-04T16:48:35.555Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-04T16:49:40.562Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/honkit-plugin-mermaid-md-adoc/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/honkit-plugin-mermaid-md-adoc/mermaid.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-intopic-toc/anchor.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-intopic-toc/gumshoe.polyfills.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-intopic-toc/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/@dogatana/honkit-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-collapsible-chapters/collapsible-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
