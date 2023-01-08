@@ -118,11 +118,11 @@ $ curl http://127.0.0.1:8000/items/5?q=somequery
 FastAPIではルーティングの定義に従って、自動でOpenAPIを生成してくれます
 http://127.0.0.1:8000/docs を開くと、[Swagger UI](https://swagger.io/tools/swagger-ui/)でOpenAPIドキュメントを表示してくれる
 
-![](https://storage.googleapis.com/zenn-user-upload/69055f7f9341-20230104.png)
+![](images/01.png)
 
 また、http://127.0.0.1:8000/redoc を開くと [ReDoc](https://github.com/Redocly/redoc) でもOpenAPIドキュメントを表示してくれます
 
-![](https://storage.googleapis.com/zenn-user-upload/0769a3531e86-20230104.png)
+![](images/02.png)
 
 ## 2. データベースを用意する
 docker composeでPostgreSQLを起動します
@@ -526,7 +526,7 @@ uvicorn app.main:app --reload
 
 OpenAPIが自動で定義されています
 
-![](https://storage.googleapis.com/zenn-user-upload/702ba9c77e48-20230104.png)
+![](images/03.png)
 
 curlでリクエストを送信してみます
 ```sh
