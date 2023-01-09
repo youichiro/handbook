@@ -18,3 +18,7 @@
   * [8. マイグレーションを実行する](FastAPI/README.md#8-マイグレーションを実行する)
   * [9. 動作確認する](FastAPI/README.md#9-動作確認する)
 
+## 開発環境
+* [zsh](zsh/README.md)
+  * [zsh-autosuggestions](zsh/README.md#zsh-autosuggestions)
+
