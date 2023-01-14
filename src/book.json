@@ -20,5 +20,8 @@
       "maxDepth": 3,
       "isCollapsed": false
     }
+  },
+  "styles": {
+    "website": "styles/website.css"
   }
 }
