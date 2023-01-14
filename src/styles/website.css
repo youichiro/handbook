@@ -1,4 +1,6 @@
-pre {
-    overflow-x: scroll;
-    width: 100vw;
+@media screen and (max-width: 600px) {
+    pre {
+        overflow-x: scroll;
+        width: 95vw;
+    }
 }
