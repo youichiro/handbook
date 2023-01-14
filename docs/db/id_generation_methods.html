@@ -428,18 +428,19 @@
 <li>インデックスの空間効率がいい</li>
 </ul>
 </li>
-<li><p>デメリット</p>
-<ul>
+<li>デメリット<ul>
 <li>INSERTが完了するまでIDがわからない<ul>
 <li>非同期処理したいときでも先にIDは返したい場合、IDを採番するためだけに先にINSERTしないといけない</li>
 </ul>
 </li>
-<li>データ量が増えてDBが複数になった場合、IDが重複する<h2 id="uuid">UUID</h2>
-アプリケーションがランダムにIDを生成する方式</li>
+<li>データ量が増えてDBが複数になった場合、IDが重複する</li>
 </ul>
 </li>
-<li><p>メリット</p>
+</ul>
+<h2 id="uuid">UUID</h2>
+<p>アプリケーションがランダムにIDを生成する方式</p>
 <ul>
+<li>メリット<ul>
 <li>アプリケーションがIDを生成するので、採番のためにDBアクセスしなくていい</li>
 </ul>
 </li>
@@ -447,41 +448,16 @@
 <li>数値型で扱えない</li>
 <li>ソートできない</li>
 <li>インデックスの空間効率が悪い</li>
-<li>INSERTにかかる時間が増えていく<ul>
-<li><a href="https://kccoder.com/mysql/uuid-vs-int-insert-performance/" target="_blank">https://kccoder.com/mysql/uuid-vs-int-insert-performance/</a></li>
-<li><img src="images/01.png" alt></li>
-<li><a href="https://techblog.raccoon.ne.jp/archives/1627262796.html" target="_blank">https://techblog.raccoon.ne.jp/archives/1627262796.html</a></li>
-<li>AUTO_INCREMENTはシーケンシャルなので、リーフページを集中させることができ、キャッシュのヒット率が高くなる<ul>
-<li>=&gt; レコードが増えてもパフォーマンスは一定を維持できる</li>
-<li><img src="images/02.png" alt></li>
-</ul>
-</li>
-<li>UUIDはシーケンシャルではないので、INSERTするたびにテーブル全体のランダム位置に対するリーフページの読み込みが必要になる<ul>
-<li>=&gt; レコードが増えるとパフォーマンスが劣化する</li>
-<li><img src="images/03.png" alt></li>
-</ul>
-</li>
-<li>読み込み時は、1レコードを取得する場合はAUTO_INCREMENTとUUIDでパフォーマンスに差はない<ul>
-<li>が、実際は新しいレコードほど頻繁に読み込むことになる</li>
-<li>最新のリーフノードほど参照頻度が高くなり、キャッシュヒット率が高くなるので、パフォーマンスが高くなる<ul>
-<li><img src="images/04.png" alt></li>
-</ul>
-</li>
-<li>UUIDの場合、データの分布は時系列と関係ないので、AUTO_INCREMENTのような恩恵を受けることはできない</li>
+<li>INSERTにかかる時間が増えていく</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>MySQL8 の <a href="https://dev.mysql.com/doc/refman/8.0/ja/miscellaneous-functions.html#function_uuid-to-bin" target="_blank">uuid_to_bin()</a> 関数を使うとほぼシーケンシャルな値にできるらしい<ul>
-<li><blockquote>
-<p> UUID 値がバージョン 1 形式に従っていない場合、時間部分スワッピングには利点がありません</p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<h3 id="insertにかかる時間が増えていく">INSERTにかかる時間が増えていく</h3>
+<p><a href="https://kccoder.com/mysql/uuid-vs-int-insert-performance/" target="_blank">https://kccoder.com/mysql/uuid-vs-int-insert-performance/</a><br><img src="images/01.png" alt></p>
+<p><a href="https://techblog.raccoon.ne.jp/archives/1627262796.html" target="_blank">https://techblog.raccoon.ne.jp/archives/1627262796.html</a><br>AUTO_INCREMENTはシーケンシャルなので、リーフページを集中させることができ、キャッシュのヒット率が高くなる<br>=&gt; レコードが増えてもパフォーマンスは一定を維持できる<br><img src="images/02.png" alt></p>
+<p>UUIDはシーケンシャルではないので、INSERTするたびにテーブル全体のランダム位置に対するリーフページの読み込みが必要になる<br>=&gt; レコードが増えるとパフォーマンスが劣化する<br><img src="images/03.png" alt></p>
+<p>読み込み時は、1レコードを取得する場合はAUTO_INCREMENTとUUIDでパフォーマンスに差はない<br>が、実際は新しいレコードほど頻繁に読み込むことになる<br>最新のリーフノードほど参照頻度が高くなり、キャッシュヒット率が高くなるので、パフォーマンスが高くなる<br><img src="images/04.png" alt></p>
+<p>UUIDの場合、データの分布は時系列と関係ないので、AUTO_INCREMENTのような恩恵を受けることはできない<br>MySQL8 の <a href="https://dev.mysql.com/doc/refman/8.0/ja/miscellaneous-functions.html#function_uuid-to-bin" target="_blank">uuid_to_bin()</a> 関数を使うとほぼシーケンシャルな値にできるらしい</p>
 <h2 id="ulid">ULID</h2>
 <p>UUIDと同じくランダムに値を生成するが、先頭がタイムスタンプ成分になっている方式</p>
 <ul>
@@ -508,7 +484,7 @@
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">id</span>.<span class="hljs-built_in">str</span>
 <span class="hljs-string">&apos;01GPN7FK0E0WY9QF46MPK0SRVK&apos;</span> <span class="hljs-comment"># 26文字</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">id</span>.<span class="hljs-built_in">int</span>
-<span class="hljs-number">2023260978905909068547623492420166515</span> <span class="hljs-comment"># 数値型でもよかったりするのかな🤔</span>
+<span class="hljs-number">2023260978905909068547623492420166515</span>
 </code></pre>
 <h2 id="参考">参考</h2>
 <ul>
@@ -555,7 +531,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"IDの生成方法","level":"4.1","depth":1,"previous":{"title":"zsh","level":"3.1","depth":1,"path":"zsh/README.md","ref":"zsh/README.md","articles":[{"title":"zsh-autosuggestions","level":"3.1.1","depth":2,"anchor":"#zsh-autosuggestions","path":"zsh/README.md","ref":"zsh/README.md#zsh-autosuggestions","articles":[]}]},"dir":"ltr"},"config":{"plugins":["mermaid-md-adoc","@ansanloms/uml","intopic-toc","@dogatana/back-to-top-button","collapsible-chapters","lb2br","codeblock-filename"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"@dogatana/back-to-top-button":{},"@ansanloms/uml":{},"intopic-toc":{"selector":".markdown-section h1, .markdown-section h2, .markdown-section h3, .markdown-section h4, .markdown-section h5, .markdown-section h6","mode":"nested","maxDepth":3,"isCollapsed":false,"isScrollspyActive":true,"visible":true,"label":""},"search":{},"collapsible-chapters":{},"mermaid-md-adoc":{},"lb2br":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"uml":{"format":"svg","charset":"utf8","config":"monochrome"},"codeblock-filename":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"youichiro handbook","gitbook":"*"},"file":{"path":"db/id_generation_methods.md","mtime":"2023-01-14T03:01:58.497Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-14T03:02:24.129Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"IDの生成方法","level":"4.1","depth":1,"previous":{"title":"zsh","level":"3.1","depth":1,"path":"zsh/README.md","ref":"zsh/README.md","articles":[{"title":"zsh-autosuggestions","level":"3.1.1","depth":2,"anchor":"#zsh-autosuggestions","path":"zsh/README.md","ref":"zsh/README.md#zsh-autosuggestions","articles":[]}]},"dir":"ltr"},"config":{"plugins":["mermaid-md-adoc","@ansanloms/uml","intopic-toc","@dogatana/back-to-top-button","collapsible-chapters","lb2br","codeblock-filename"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"@dogatana/back-to-top-button":{},"@ansanloms/uml":{},"intopic-toc":{"selector":".markdown-section h1, .markdown-section h2, .markdown-section h3, .markdown-section h4, .markdown-section h5, .markdown-section h6","mode":"nested","maxDepth":3,"isCollapsed":false,"isScrollspyActive":true,"visible":true,"label":""},"search":{},"collapsible-chapters":{},"mermaid-md-adoc":{},"lb2br":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"uml":{"format":"svg","charset":"utf8","config":"monochrome"},"codeblock-filename":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"youichiro handbook","gitbook":"*"},"file":{"path":"db/id_generation_methods.md","mtime":"2023-01-14T04:17:13.163Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-14T04:17:25.044Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

@@ -13,6 +13,7 @@ DBがIDを連番で生成する方式
     - INSERTが完了するまでIDがわからない
         - 非同期処理したいときでも先にIDは返したい場合、IDを採番するためだけに先にINSERTしないといけない
     - データ量が増えてDBが複数になった場合、IDが重複する
+
 ## UUID
 アプリケーションがランダムにIDを生成する方式
 
@@ -23,22 +24,28 @@ DBがIDを連番で生成する方式
     - ソートできない
     - インデックスの空間効率が悪い
     - INSERTにかかる時間が増えていく
-        - https://kccoder.com/mysql/uuid-vs-int-insert-performance/
-        - ![](images/01.png)
-        - https://techblog.raccoon.ne.jp/archives/1627262796.html
-        - AUTO_INCREMENTはシーケンシャルなので、リーフページを集中させることができ、キャッシュのヒット率が高くなる
-            - => レコードが増えてもパフォーマンスは一定を維持できる
-            - ![](images/02.png)
-        - UUIDはシーケンシャルではないので、INSERTするたびにテーブル全体のランダム位置に対するリーフページの読み込みが必要になる
-            - => レコードが増えるとパフォーマンスが劣化する
-            - ![](images/03.png)
-        - 読み込み時は、1レコードを取得する場合はAUTO_INCREMENTとUUIDでパフォーマンスに差はない
-            - が、実際は新しいレコードほど頻繁に読み込むことになる
-            - 最新のリーフノードほど参照頻度が高くなり、キャッシュヒット率が高くなるので、パフォーマンスが高くなる
-                - ![](images/04.png)
-            - UUIDの場合、データの分布は時系列と関係ないので、AUTO_INCREMENTのような恩恵を受けることはできない
-    - MySQL8 の [uuid_to_bin()](https://dev.mysql.com/doc/refman/8.0/ja/miscellaneous-functions.html#function_uuid-to-bin) 関数を使うとほぼシーケンシャルな値にできるらしい
-        - >  UUID 値がバージョン 1 形式に従っていない場合、時間部分スワッピングには利点がありません
+
+
+### INSERTにかかる時間が増えていく
+https://kccoder.com/mysql/uuid-vs-int-insert-performance/
+![](images/01.png)
+
+https://techblog.raccoon.ne.jp/archives/1627262796.html
+AUTO_INCREMENTはシーケンシャルなので、リーフページを集中させることができ、キャッシュのヒット率が高くなる
+=> レコードが増えてもパフォーマンスは一定を維持できる
+![](images/02.png)
+
+UUIDはシーケンシャルではないので、INSERTするたびにテーブル全体のランダム位置に対するリーフページの読み込みが必要になる
+=> レコードが増えるとパフォーマンスが劣化する
+![](images/03.png)
+
+読み込み時は、1レコードを取得する場合はAUTO_INCREMENTとUUIDでパフォーマンスに差はない
+が、実際は新しいレコードほど頻繁に読み込むことになる
+最新のリーフノードほど参照頻度が高くなり、キャッシュヒット率が高くなるので、パフォーマンスが高くなる
+![](images/04.png)
+
+UUIDの場合、データの分布は時系列と関係ないので、AUTO_INCREMENTのような恩恵を受けることはできない
+MySQL8 の [uuid_to_bin()](https://dev.mysql.com/doc/refman/8.0/ja/miscellaneous-functions.html#function_uuid-to-bin) 関数を使うとほぼシーケンシャルな値にできるらしい
 
 ## ULID
 UUIDと同じくランダムに値を生成するが、先頭がタイムスタンプ成分になっている方式
@@ -65,7 +72,7 @@ pip install ulid-py
 >>> id.str
 '01GPN7FK0E0WY9QF46MPK0SRVK' # 26文字
 >>> id.int
-2023260978905909068547623492420166515 # 数値型でもよかったりするのかな🤔
+2023260978905909068547623492420166515
 ```
 
 ## 参考
