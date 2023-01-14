@@ -33,6 +33,7 @@ erDiagram
         created_at datetime
         updated_at datetime
     }
+    users ||--|{ tasks : has_many
 ```
 
 以下のCRUDを用意します
