@@ -22,3 +22,5 @@
 * [zsh](zsh/README.md)
   * [zsh-autosuggestions](zsh/README.md#zsh-autosuggestions)
 
+## DB設計
+* [IDの生成方法](db/id_generation_methods.md)
