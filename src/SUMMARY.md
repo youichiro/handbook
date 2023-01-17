@@ -24,3 +24,5 @@
 
 ## DB設計
 * [IDの生成方法](db/id_generation_methods.md)
+* [MySQLのJSON型](db/rdb_json.md)
+
